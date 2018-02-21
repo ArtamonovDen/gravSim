@@ -1,5 +1,6 @@
 #pragma once
 #include "CelestialObject.h"
+#include "Screen.h"
 
 #include <vector>
 class Space
@@ -17,6 +18,10 @@ public:
 	void somethingHappening();
 
 	void udpateObject(CelestialObject*, double, double,double, int , int);
+
+	void loop();
+
+	Screen spaceScreen;
 
 private:
 	std::vector<CelestialObject*> objects;

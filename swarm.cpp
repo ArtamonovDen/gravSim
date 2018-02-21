@@ -1,13 +1,13 @@
 #include "swarm.h"
 #include "particle.h"
 
-swarm::swarm()
+Swarm::Swarm()
 {
 	 m_pParticles = new particle[NPARTICLES];
 }
 
 
-swarm::~swarm()
+Swarm::~Swarm()
 {
 	if( m_pParticles!=nullptr)
 		delete [] m_pParticles;

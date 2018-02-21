@@ -1,8 +1,14 @@
 #include "Space.h"
+#include "particle.h"
+#include "swarm.h"
 
-
+#include <SDL.h>
+#include <stdlib.h>
+#include <time.h>
+#include <iostream>
 Space::Space()
 {
+
 }
 
 
@@ -20,7 +26,7 @@ void Space::add(unsigned long int weight, unsigned long int radius, double x, do
 }
 
 double Space::getDistance(CelestialObject* A, CelestialObject* B){
-	return sqrt(pow((A->x - B->x), 2) * pow((A->y - B->y), 2));
+	return sqrt(pow((A->x - B->x), 2) + pow((A->y - B->y), 2));
 
 }
 
@@ -43,6 +49,9 @@ void Space::udpateObject(CelestialObject* A, double sinAlpha, double cosAlpha, d
 
 	A->x += A->vx*dt;
 	A->y += A->vy*dt;
+
+	std::cout << "pos: " << A->x << " " << A->y << "v: " << A->vx << " " << A->vy << "a: " << A->ax << " " << A->ay << std::endl;
+	spaceScreen.setPixel(A->x, A->y,255,255,255);
 }
 
 
@@ -51,7 +60,7 @@ void Space::somethingHappening(){
 
 	std::vector<CelestialObject*>::iterator i = objects.begin();
 	for (i; i != objects.end();){
-		std::vector<CelestialObject*>::iterator j = i;
+		std::vector<CelestialObject*>::iterator j = i+1;
 		for (j; j != objects.end();){
 
 			double r = getDistance(*i, *j);
@@ -67,9 +76,9 @@ void Space::somethingHappening(){
 				double a = G * (*j)->weight / r*r;
 
 				if ((*i)->x < (*j)->x)
-					sign_ax = -1;
+					sign_ax = 1;
 				if ((*i)->y < (*j)->y)
-					sign_ay = -1;
+					sign_ay = 1;
 
 
 				udpateObject(*i, sinAlpha, cosAlpha, a, sign_ax, sign_ay);
@@ -95,8 +104,11 @@ void Space::somethingHappening(){
 				delete temp_j;//?
 
 			}
-			++i;
+			//Changes in buffer means objects changes  his x,y in buf
+			//update()??
+			
 		}
+		++i;
 	}
 
 	//for (int i = 0; i < N; i++){
@@ -153,4 +165,70 @@ void Space::somethingHappening(){
 	//	}
 	//}
 
+
+
+}
+
+
+void Space::loop(){
+
+	srand(time(NULL));
+
+	if (spaceScreen.init() == 0)
+	std::cout << "failured init" << std::endl;
+	
+
+	//--------------------
+	
+
+
+
+
+
+	Swarm swarmA;
+	
+	while (1){
+
+		somethingHappening();
+		spaceScreen.update();
+		//update for all?
+
+		//int elapsed = SDL_GetTicks();
+		//int green = (1 + sin(elapsed*0.001)) * 128;
+		//int red = (1 + sin(elapsed*0.002)) * 128;
+		//int blue = (1 + sin(elapsed*0.003)) * 128;
+
+		//
+
+		//const particle * const pParticle = swarmA.getParticles();
+		//for (int i = 0; i < Swarm::NPARTICLES; i++){
+		//	particle prtcl = pParticle[i];
+
+		//	int x = (prtcl.m_x + 1)* Screen::SCREEN_WIDTH/2;
+		//	int y = (prtcl.m_y + 1)* Screen::SCREEN_HEIGHT/2;
+
+		//	spaceScreen.setPixel(x, y, red, green, blue);
+		//	
+		//}
+		///*int elapsed =SDL_GetTicks();
+		//int green = (1+ sin(elapsed*0.001)) * 128;
+		//int red= (1 + sin(elapsed*0.002)) * 128;
+		//int blue = (1 + sin(elapsed*0.003)) * 128;
+
+		//std::cout << green << " ";
+		//for (int y = 0; y < screen.SCREEN_HEIGHT; y++){
+		//	for (int x = 0; x < screen.SCREEN_WIDTH; x++){
+		//		screen.setPixel(x, y, red, green, blue);
+		//		
+		//	}			
+		//}*/
+
+
+		//spaceScreen.update();
+
+		if (spaceScreen.processEvents() == 0){
+			break;
+		}
+	}
+		
 }
