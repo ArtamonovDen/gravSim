@@ -21,7 +21,6 @@
 
 
 int main(int argc, char * argv[]){
-
 	srand(time(NULL));
 
 	/*Screen screen;
@@ -34,9 +33,14 @@ int main(int argc, char * argv[]){
 	//CelestialObject(unsigned long int weight, unsigned long int radius,\
 	 double x, double y, double ax, double ay, double vx, double vy)
 	Space space;
-	space.add(100, 10, 300, 200, 20, 100, 0, 0);
+	space.add(1000, 1, 350, 100, 0, 0, 0, 0);
 
-	space.add(10000, 10, 500, 300, 0,0, 0, 0);
+	space.add(100000 ,1, 350, 200, 0,0, 0, 0);
+
+	space.add(1000, 1, 200, 150, 0, 0, 0, 0);
+
+	space.add(1000, 1, 600, 600, 0, 0, 3, 0);
+	space.add(100000, 1, 600, 500, 0, 0, -3, 0);
 
 	//space.add(1000, 100, 200, 300, 0, 0, 2, 3);
 

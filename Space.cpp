@@ -52,6 +52,7 @@ void Space::udpateObject(CelestialObject* A, double sinAlpha, double cosAlpha, d
 
 	std::cout << "pos: " << A->x << " " << A->y << "v: " << A->vx << " " << A->vy << "a: " << A->ax << " " << A->ay << std::endl;
 	spaceScreen.setPixel(A->x, A->y,255,255,255);
+
 }
 
 
@@ -73,18 +74,21 @@ void Space::somethingHappening(){
 
 				int sign_ax = 1, sign_ay = 1;
 				//FOR I
-				double a = G * (*j)->weight / r*r;
+				double a = (G * (*j)->weight) / (r*r);
 
 				if ((*i)->x < (*j)->x)
 					sign_ax = 1;
+				else
+					sign_ax = -1;
 				if ((*i)->y < (*j)->y)
 					sign_ay = 1;
+				else sign_ay = -1;
 
 
 				udpateObject(*i, sinAlpha, cosAlpha, a, sign_ax, sign_ay);
 
 				//FOR J
-				a = G * (*i)->weight / r*r;
+				a = (G * (*i)->weight) / (r*r);
 				sign_ax *= -1;
 				sign_ay *= -1;
 				udpateObject(*j, sinAlpha, cosAlpha, a, sign_ax, sign_ay);
@@ -180,18 +184,17 @@ void Space::loop(){
 
 	//--------------------
 	
-
-
-
-
-
+	
 	Swarm swarmA;
 	
 	while (1){
 
 		somethingHappening();
+		//function for updating buffer// and there will be spec function for drawing objects
 		spaceScreen.update();
 		//update for all?
+
+
 
 		//int elapsed = SDL_GetTicks();
 		//int green = (1 + sin(elapsed*0.001)) * 128;

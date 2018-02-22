@@ -25,7 +25,7 @@ public:
 
 private:
 	std::vector<CelestialObject*> objects;
-	const double G = 0.005; //Grav. constant
+	const double G = 0.002; //Grav. constant
 	const double dt = 0.005; //short time period for computing integrals
 };
 
