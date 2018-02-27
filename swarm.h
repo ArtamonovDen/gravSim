@@ -3,12 +3,12 @@
 #include "particle.h"
 
 
-class swarm
+class Swarm
 {
 public:
 	const static int NPARTICLES = 5000;
-	swarm();
-	virtual ~swarm();
+	Swarm();
+	virtual ~Swarm();
 
 	const particle * const getParticles(){ return m_pParticles; }
 private:
