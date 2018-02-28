@@ -19,6 +19,12 @@ Space::~Space()
 	}
 }
 
+void Space::createByButton(unsigned long int weight, int x, int y, double ax, double ay, double vx, double vy){
+	add(weight, weight / 300 + 2, x, y, ax, ay, vx, vy);
+	std::cout << "New object created: " << x << ", " << y << std::endl;
+
+}
+
 
 void Space::add(unsigned long int weight, unsigned long int radius, double x, double y, double ax, double ay, double vx, double vy){
 	CelestialObject* newObj = new CelestialObject( weight,  radius,  x,  y,  ax,  ay,  vx,  vy);
@@ -46,115 +52,126 @@ bool Space::is_collapse(CelestialObject* A, CelestialObject* B, double r){
 }
 
 
-void Space::udpateObject(CelestialObject* A, double sinAlpha, double cosAlpha, double a, int sign_ax, int sign_ay){
+void Space::udpateObject(CelestialObject* A){
 
-	double ax = sign_ax*a*cosAlpha;
-	double ay = sign_ay*a*sinAlpha;
-
-	A->ax += ax;
-	A->ay += ay;
+	spaceScreen.drawCircle(A->x, A->y, A->radius, 0, 0, 0);
 
 	A->vx += A->ax * dt;
 	A->vy += A->ay * dt;
 
 	A->x += A->vx*dt;
 	A->y += A->vy*dt;
-
-	//std::cout << "pos: " << A->x << " " << A->y << "v: " << A->vx << " " << A->vy << "a: " << A->ax << " " << A->ay << std::endl;
-	spaceScreen.setPixel(A->x, A->y,255,255,255);
+	//std::cout << "pos: " << A->x << " " << A->y << "v: " << A->vx << " " << A->vy << "a: " << A->ax << " " << A->ay << std::endl;	
+	
+	/*i = -1*r;
+	for ( i; i < r + 1; i++){
+		int j = -1*r;
+		for ( j; j < r + 1; j++){
+			if (i*i + j*j <= r*r )
+				spaceScreen.setPixel(A->x+i, A->y+j, 255, 255, 0);
+		}
+	}*/
+	spaceScreen.drawCircle(A->x, A->y, A->radius, 255, 255, 0);
+	
+	//spaceScreen.setPixel(A->x, A->y,255,255,255);
 
 }
-//ÎÒÄÅËÜÍÎ Ñ×ÈÒÀÒÜ ÑÍÀ×ÀËÀ ÓÑÊÎÐÅÍÈÅ ÄËß ÂÑÅÕ, À ÏÎÒÎÌ ÅÙÅ ÎÄÍÈÌ ÏÐÎÕÎÄÎÌ ÂÛ×ÈÑËßÒÜ ÑÊÎÐÎÑÒÜ È 
-//ÍÓÆÍÎ ×ÒÎ-ÒÎ ÑÄÅËÀÒÜ Ñ ÊÎËËÈÇÈßÌÈ
 
 void Space::merge(CelestialObject*A, CelestialObject* B){
-
+	//CHECK MASS AND RADIUS  RATIO!
 	//merge A and B. Add B to A
-
+	
 	//calculate the momentum
-	double M = A->weight + B->weight;
+	double M = (A->weight + B->weight);
 	double Vx = ((A->weight * A->vx) + (B->weight * B->vx)) / M;
 	double Vy = ((A->weight * A->vy) + (B->weight * B->vy)) / M;
+	M *= 0.6;
 
-	//Megre to A
+	
+
 	A->weight = M;
+	A->ax = 0;
+	A->ay = 0;
 	A->vx = Vx;
 	A->vy = Vy;
+	
+	
+	if (A->radius >= B->radius){
+		A->radius += B->radius*0.4;
+	}
+	else {
+		A->radius = B->radius + A->radius*0.4;
+	}
+
+	//Megre to A
+
+	//RADIUS!
 }
 
 
 void Space::somethingHappening(){
-	int N = objects.size();
 
 	std::vector<CelestialObject*>::iterator i = objects.begin();
 	for (i; i != objects.end();){
-		std::vector<CelestialObject*>::iterator j = i+1;
+		std::vector<CelestialObject*>::iterator j = i + 1;
 		for (j; j != objects.end();){
 
 			double r = getDistance(*i, *j);
 
 			if (!is_collapse(*i, *j, r)){
-
 				//compute alpha (between r-line and OX)
 				double sinAlpha = abs((*i)->y - (*j)->y) / r;
 				double cosAlpha = abs((*i)->x - (*j)->x) / r;
 
 				int sign_ax = 1, sign_ay = 1;
 				//FOR I
-				double a = (G * (*j)->weight) / (r*r);
+				double a = (G * (*j)->weight) / (r*r) ;
 
 				if ((*i)->x < (*j)->x)
 					sign_ax = 1;
 				else
 					sign_ax = -1;
+
 				if ((*i)->y < (*j)->y)
 					sign_ay = 1;
 				else sign_ay = -1;
 
+				double ax = sign_ax*a*cosAlpha;
+				double ay = sign_ay*a*sinAlpha;
 
-				udpateObject(*i, sinAlpha, cosAlpha, a, sign_ax, sign_ay);
+				(*i)->ax += ax;
+				(*i)->ay += ay;
+
 
 				//FOR J
-				a = (G * (*i)->weight) / (r*r);
+				a = 0.1*( (*i)->weight) / (r*r) ;
 				sign_ax *= -1;
 				sign_ay *= -1;
-				udpateObject(*j, sinAlpha, cosAlpha, a, sign_ax, sign_ay);
+				 ax = sign_ax*a*cosAlpha;
+				 ay = sign_ay*a*sinAlpha;
 
-				//t+=dt //maybe for some reasones
+				(*j)->ax += ax;
+				(*j)->ay += ay;
+
 				++j;
 			}
 			else{
-				//For now, just destro'em. Fistly j, then break and then i
-
 				//drop j and add everything to i -> merge()
 				merge(*i, *j);
+				spaceScreen.drawCircle((*j)->x, (*j)->y, (*j)->radius, 0, 0, 0);
 				CelestialObject* temp_j;
 				temp_j = (*j);
 				j = objects.erase(j);
 				delete temp_j;
-
-
-				//Firstly do it just for j. Means i destroys j
-				//CelestialObject* temp_i;
-				
-
-				//êîîðäèíàòû âûñ÷èòûâàòü â êîíöå, ïîñëå òîãî êàê âñå óñêîðåíèÿ è ñêîðîñòè ñëîæàòñÿ
-
-				//drop j and add everything to i -> merge()
-
-
-			}
-			//Changes in buffer means objects changes  his x,y in buf
-			//update()??
-			
+			}	
 		}
 		++i;
 	}
 
+
+	for (auto& r : objects)
+		udpateObject(r);		
 	
-
-
-
 }
 
 
@@ -163,19 +180,22 @@ void Space::loop(){
 	srand(time(NULL));
 
 	if (spaceScreen.init() == 0)
-	std::cout << "failured init" << std::endl;
-	
+		std::cout << "failured init" << std::endl;
+
 
 	//--------------------
-	
-	
+
+
 	Swarm swarmA;
-	
-	while (1){
+	SDL_Event  event;
+
+	int flag = 1;
+	while (flag){
 
 		somethingHappening();
-		//function for updating buffer// and there will be spec function for drawing objects
 		spaceScreen.update();
+		//function for updating buffer// and there will be spec function for drawing objects
+		
 		//update for all?
 
 
@@ -213,9 +233,54 @@ void Space::loop(){
 
 		//spaceScreen.update();
 
-		if (spaceScreen.processEvents() == 0){
+		/*if (spaceScreen.processEvents() == 0){
 			break;
+		}*/
+		while (SDL_PollEvent(&event)){
+			if (event.type == SDL_MOUSEBUTTONDOWN ){
+				std::cout << "New Object" << std::endl;
+				int x = event.button.x;
+				int y = event.button.y;
+				createByButton(900, x, y, 0, 0, 0, 0);
+			}
+
+			if (event.type == SDL_QUIT){
+				std::cout << "Quit ";
+				flag = 0;
+				break;
+			}
 		}
-	}
 		
+		
+	}
 }
+		
+
+
+	/*static int i = 0;
+	SDL_Event event;*/
+	//While(SDL_PollEvent(&event)){
+	//	/*if (event.type == SDL_){
+	//	return 2;
+	//	}*/
+
+	//	if (event.type == SDL_QUIT){
+	//		return 0;
+	//	}
+	//	/*	if (event.type == SDL_KEYDOWN){
+
+	//	std::cout << "KD ";
+	//	return 0;
+	//	}*/
+	//	//if (event.type == SDL_MOUSEMOTION){
+	//	//	std::cout << "KD ";
+	//	//	for (int j = 0; j < 100; j++, i++){
+	//	//		if (i<SCREEN_HEIGHT*SCREEN_WIDTH)
+	//	//			m_buffer[i] = 0xFF0000FF;
+	//	//	}
+	//	//	//std::cout << "KD ";
+
+	//	//}
+
+	//	update();
+	//}

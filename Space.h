@@ -20,7 +20,8 @@ public:
 
 	void somethingHappening();
 
-	void udpateObject(CelestialObject*, double, double,double, int , int);
+	void udpateObject(CelestialObject*);
+	void createByButton(unsigned long int weight, int x, int y, double ax, double ay, double vx, double vy);
 
 	void loop();
 	void merge(CelestialObject*, CelestialObject*);
@@ -30,7 +31,7 @@ public:
 
 private:
 	std::vector<CelestialObject*> objects;
-	const double G = 0.0002; //Grav. constant
-	const double dt = 0.0005; //short time period for computing integrals
+	const double G = 0.1; //Grav. constant
+	const double dt = 0.1; //short time period for computing integrals
 };
 

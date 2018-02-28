@@ -15,3 +15,10 @@ particle::particle()
 particle::~particle()
 {
 }
+
+void particle::update(){
+	const double speed = 0.01;
+	m_x += speed;
+	m_y += speed;
+
+}

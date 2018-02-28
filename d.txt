@@ -1,0 +1,53 @@
+//std::vector<CelestialObject*>::iterator i = objects.begin();
+	//for (i; i != objects.end();){
+	//	std::vector<CelestialObject*>::iterator j = i+1;
+	//	for (j; j != objects.end();){
+
+	//		double r = getDistance(*i, *j);
+
+	//		if (!is_collapse(*i, *j, r)){
+
+	//			//compute alpha (between r-line and OX)
+	//			double sinAlpha = abs((*i)->y - (*j)->y) / r;
+	//			double cosAlpha = abs((*i)->x - (*j)->x) / r;
+
+	//			int sign_ax = 1, sign_ay = 1;
+	//			//FOR I
+	//			double a = (G * (*j)->weight) / (r*r);
+
+	//			if ((*i)->x < (*j)->x)
+	//				sign_ax = 1;
+	//			else
+	//				sign_ax = -1;
+
+	//			if ((*i)->y < (*j)->y)
+	//				sign_ay = 1;
+	//			else sign_ay = -1;
+
+	//			udpateObject(*i, sinAlpha, cosAlpha, a, sign_ax, sign_ay);
+
+	//			//FOR J
+	//			a = (G * (*i)->weight) / (r*r);
+	//			sign_ax *= -1;
+	//			sign_ay *= -1;
+	//			udpateObject(*j, sinAlpha, cosAlpha, a, sign_ax, sign_ay);
+
+	//			//t+=dt //maybe for some reasones
+	//			++j;
+	//		}
+	//		else{
+	//			//drop j and add everything to i -> merge()
+	//			merge(*i, *j);
+	//			CelestialObject* temp_j;
+	//			temp_j = (*j);
+	//			j = objects.erase(j);
+	//			delete temp_j;				
+
+	//			//координаты высчитывать в конце, после того как все ускорения и скорости сложатся
+	//			
+	//		}
+	//		//Changes in buffer means objects changes  his x,y in buf
+	//		//update()??			
+	//	}
+	//	++i;
+	//}

@@ -12,8 +12,8 @@
 class Screen{
 public:
 
-	const static int  SCREEN_WIDTH = 1000;
-	const static int  SCREEN_HEIGHT = 800;
+	const static int  SCREEN_WIDTH = 1500;
+	const static int  SCREEN_HEIGHT = 1000;
 private:
 	SDL_Window* m_window;
 	SDL_Renderer* m_renderer;
@@ -102,6 +102,10 @@ public:
 		static int i = 0;
 		SDL_Event event;
 		while (SDL_PollEvent(&event)){
+			/*if (event.type == SDL_){
+				return 2;
+			}*/
+
 			if (event.type == SDL_QUIT){
 				return 0;
 			}
@@ -143,7 +147,21 @@ public:
 		delete[] m_buffer;
 	}
 
+	void clear(){
+		memset(m_buffer, 0, SCREEN_WIDTH*SCREEN_HEIGHT*sizeof(uint32_t));
 
+	}
+
+	void drawCircle(int x, int y, int r, uint8_t red, uint8_t green, uint8_t blue){
+		int i = -1 * r;
+		for (i; i < r + 1; i++){
+			int j = -1 * r;
+			for (j; j < r + 1; j++){
+				if (i*i + j*j <= r*r)
+					setPixel(x + i, y + j, red,green,blue);
+			}
+		}
+	}
 
 
 };

@@ -23,32 +23,35 @@
 int main(int argc, char * argv[]){
 	srand(time(NULL));
 
-	/*Screen screen;
-	if (screen.init() == 0)
-		std::cout << "failured init" << std::endl;
-*/
+	
 
-	//--------------------
+
+	//------------------------------------------------------------------------
 
 	//CelestialObject(unsigned long int weight, unsigned long int radius,\
 	 double x, double y, double ax, double ay, double vx, double vy)
 	Space space;
-	//space.add(10000, 1, 350, 100, 0, 0, 0, 0);
+	/*space.add(10000, 1, 350, 100, 0, 0, 0, 0);
 
-	//space.add(10000 ,1, 350, 200, 0,0, 0, 0);
+	space.add(10000 ,1, 350, 200, 0,0, 0, 0);
 
-	//space.add(10000, 1, 200, 150, 0, 0, 0, 0);
+	space.add(10000, 1, 200, 150, 0, 0, 0, 0);
 
-	//space.add(10000, 1, 600, 600, 0, 0, 0, 0);
-	//space.add(10000, 1, 600, 500, 0, 0, 0, 0);
+	space.add(10000, 1, 600, 600, 0, 0, 0, 0);
+	space.add(10000, 1, 600, 500, 0, 0, 0, 0);
 
-	//space.add(10000, 1, 50, 150, 0, 0, 0, 0);
+	space.add(10000, 1, 50, 150, 0, 0, 0, 0);
 
-	//space.add(10000, 1, 666, 800, 0, 0, 0, 0);
-	//space.add(10000, 1, 200, 10, 0, 0, 0, 0);
+	space.add(10000, 1, 666, 800, 0, 0, 0, 0);
+	space.add(10000, 1, 200, 10, 0, 0, 0, 0);*/
 
-	const  int NPARTICLES = 100;
-	space.add(NPARTICLES);
+
+	//space.add(10000, 1, 100, 100, 0, 0, 0, 0);
+	//space.add(10000, 1, 200, 100, 0, 0, 0, 0);
+
+	const  int nparticles = 500;
+	space.add(nparticles);
+	//space.add(9000000, 1,Screen::SCREEN_WIDTH / 2, Screen::SCREEN_HEIGHT / 2,0,0,0,0 );
 
 
 
@@ -59,54 +62,56 @@ int main(int argc, char * argv[]){
 
 	//space.add(1000, 100, 200, 300, 0, 0, 2, 3);
 
+	/*space.add(14000, 1, 350, 370,  1,0, 0 ,0);
+	space.add(14000, 1, 350, 400, -1,0, 0, 0);
+
+
+	space.add(1400, 1, 300, 150,  0,0, 0 ,0);
+	space.add(1400, 1, 300, 450, 0, 0, 0, 0);
+
+	space.add(100, 1, 270, 300, 0, 0, 0, 0);*/
+	/*space.add(10000, 1, 270, 300, 0, 0, 0, 0); 
+	space.add(1400, 1, 300, 450, 0, 0, 0, 0);*/
+
 	space.loop();
 
+	//-----------------------------------------------------------------------------
 
+	/*Screen screen;
+	if (screen.init() == 0)
+		std::cout << "failured init" << std::endl;*/
 
+	/*Swarm swarmA;
+	
+	int r = 0;
+	while (1){
+		swarmA.update();
+		screen.clear();
+		int elapsed = SDL_GetTicks();
+		int green = (1 + sin(elapsed*0.001)) * 128;
+		int red = (1 + sin(elapsed*0.002)) * 128;
+		int blue = (1 + sin(elapsed*0.003)) * 128;
 
+		
 
-	//Swarm swarmA;
-	//
-	//int r = 0;
-	//while (1){
+		const particle * const pParticle = swarmA.getParticles();
 
-	//	int elapsed = SDL_GetTicks();`
-	//	int green = (1 + sin(elapsed*0.001)) * 128;
-	//	int red = (1 + sin(elapsed*0.002)) * 128;
-	//	int blue = (1 + sin(elapsed*0.003)) * 128;
+		for (int i = 0; i < Swarm::NPARTICLES; i++){
+			particle prtcl = pParticle[i];
 
-	//	
+			int x = (prtcl.m_x + 1)* Screen::SCREEN_WIDTH/2;
+			int y = (prtcl.m_y + 1)* Screen::SCREEN_HEIGHT/2;
 
-	//	const particle * const pParticle = swarmA.getParticles();
-	//	for (int i = 0; i < Swarm::NPARTICLES; i++){
-	//		particle prtcl = pParticle[i];
+			screen.setPixel(x, y, red, green, blue);
+			
+		}
 
-	//		int x = (prtcl.m_x + 1)* Screen::SCREEN_WIDTH/2;
-	//		int y = (prtcl.m_y + 1)* Screen::SCREEN_HEIGHT/2;
+		screen.update();
 
-	//		screen.setPixel(x, y, red, green, blue);
-	//		
-	//	}
-	//	/*int elapsed =SDL_GetTicks();
-	//	int green = (1+ sin(elapsed*0.001)) * 128;
-	//	int red= (1 + sin(elapsed*0.002)) * 128;
-	//	int blue = (1 + sin(elapsed*0.003)) * 128;
-
-	//	std::cout << green << " ";
-	//	for (int y = 0; y < screen.SCREEN_HEIGHT; y++){
-	//		for (int x = 0; x < screen.SCREEN_WIDTH; x++){
-	//			screen.setPixel(x, y, red, green, blue);
-	//			
-	//		}			
-	//	}*/
-
-
-	//	screen.update();
-
-	//	if (screen.processEvents() == 0){
-	//		break;
-	//	}
-	//}
+		if (screen.processEvents() == 0){
+			break;
+		}
+	}*/
 
 
 
