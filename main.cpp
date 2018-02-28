@@ -32,24 +32,9 @@ int main(int argc, char * argv[]){
 	 double x, double y, double ax, double ay, double vx, double vy)
 	Space space;
 	/*space.add(10000, 1, 350, 100, 0, 0, 0, 0);
+	*/
 
-	space.add(10000 ,1, 350, 200, 0,0, 0, 0);
-
-	space.add(10000, 1, 200, 150, 0, 0, 0, 0);
-
-	space.add(10000, 1, 600, 600, 0, 0, 0, 0);
-	space.add(10000, 1, 600, 500, 0, 0, 0, 0);
-
-	space.add(10000, 1, 50, 150, 0, 0, 0, 0);
-
-	space.add(10000, 1, 666, 800, 0, 0, 0, 0);
-	space.add(10000, 1, 200, 10, 0, 0, 0, 0);*/
-
-
-	//space.add(10000, 1, 100, 100, 0, 0, 0, 0);
-	//space.add(10000, 1, 200, 100, 0, 0, 0, 0);
-
-	const  int nparticles = 500;
+	const  int nparticles = 300;
 	space.add(nparticles);
 	//space.add(9000000, 1,Screen::SCREEN_WIDTH / 2, Screen::SCREEN_HEIGHT / 2,0,0,0,0 );
 

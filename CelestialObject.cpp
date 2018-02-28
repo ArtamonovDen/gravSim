@@ -22,6 +22,11 @@ CelestialObject::CelestialObject(){
 	vy = 0;*/
 	vx = 0;
 	vy = 0;
+
+	red = rand() % 255;
+	green = rand() % 255;
+	blue = rand() % 255;
+	blue = 255;
 }
 
 CelestialObject::~CelestialObject()

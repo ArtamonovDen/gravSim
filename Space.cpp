@@ -30,6 +30,7 @@ void Space::add(unsigned long int weight, unsigned long int radius, double x, do
 	CelestialObject* newObj = new CelestialObject( weight,  radius,  x,  y,  ax,  ay,  vx,  vy);
 	objects.push_back(newObj);
 }
+
 void Space::add(int N){
 
 	for (int i = 0; i < N; i++){
@@ -61,24 +62,14 @@ void Space::udpateObject(CelestialObject* A){
 
 	A->x += A->vx*dt;
 	A->y += A->vy*dt;
-	//std::cout << "pos: " << A->x << " " << A->y << "v: " << A->vx << " " << A->vy << "a: " << A->ax << " " << A->ay << std::endl;	
-	
-	/*i = -1*r;
-	for ( i; i < r + 1; i++){
-		int j = -1*r;
-		for ( j; j < r + 1; j++){
-			if (i*i + j*j <= r*r )
-				spaceScreen.setPixel(A->x+i, A->y+j, 255, 255, 0);
-		}
-	}*/
-	spaceScreen.drawCircle(A->x, A->y, A->radius, 255, 255, 0);
-	
-	//spaceScreen.setPixel(A->x, A->y,255,255,255);
+
+	//spaceScreen.drawCircle(A->x, A->y, A->radius, 255, 255, 0);
+	spaceScreen.drawCircle(A->x, A->y, A->radius, A->red, A->green, A->blue);
 
 }
 
 void Space::merge(CelestialObject*A, CelestialObject* B){
-	//CHECK MASS AND RADIUS  RATIO!
+	//CHECK RADIUS  RATIO!
 	//merge A and B. Add B to A
 	
 	//calculate the momentum
@@ -87,25 +78,21 @@ void Space::merge(CelestialObject*A, CelestialObject* B){
 	double Vy = ((A->weight * A->vy) + (B->weight * B->vy)) / M;
 	M *= 0.6;
 
-	
-
 	A->weight = M;
 	A->ax = 0;
 	A->ay = 0;
 	A->vx = Vx;
-	A->vy = Vy;
-	
+	A->vy = Vy;	
 	
 	if (A->radius >= B->radius){
 		A->radius += B->radius*0.4;
 	}
-	else {
+	else {//"replace" A and B
+		std::swap(A->x, B->x);
+		std::swap(A->y, B->y);
 		A->radius = B->radius + A->radius*0.4;
 	}
 
-	//Megre to A
-
-	//RADIUS!
 }
 
 
@@ -125,7 +112,7 @@ void Space::somethingHappening(){
 
 				int sign_ax = 1, sign_ay = 1;
 				//FOR I
-				double a = (G * (*j)->weight) / (r*r) ;
+				double a = (G* (*j)->weight) / (r*r) ;
 
 				if ((*i)->x < (*j)->x)
 					sign_ax = 1;
@@ -144,7 +131,7 @@ void Space::somethingHappening(){
 
 
 				//FOR J
-				a = 0.1*( (*i)->weight) / (r*r) ;
+				a = (G* (*i)->weight) / (r*r) ;
 				sign_ax *= -1;
 				sign_ay *= -1;
 				 ax = sign_ax*a*cosAlpha;
@@ -190,97 +177,95 @@ void Space::loop(){
 	SDL_Event  event;
 
 	int flag = 1;
+	int mouse_button_left = 0;//0-not clicked/ 1 - clicked
+
 	while (flag){
 
 		somethingHappening();
 		spaceScreen.update();
-		//function for updating buffer// and there will be spec function for drawing objects
-		
-		//update for all?
+
+		//EVENTS HENDLA
+		if (SDL_PollEvent(&event)){
+
+			switch (event.type)
+			{
+			
+
+			case (SDL_MOUSEBUTTONDOWN) :
+				if (event.button.button == SDL_BUTTON_LEFT){
+					//std::cout << "New Object" << std::endl;
+					int x = event.button.x;
+					int y = event.button.y;
+					createByButton(900, x, y, 0, 0, 0, 0);
+					mouse_button_left = 1;
+				}
+				break;
+			
+			case(SDL_MOUSEBUTTONUP) :
+				mouse_button_left = 0;
+				break;
+
+			case(SDL_MOUSEMOTION) :
+				if (mouse_button_left == 1)
+				{
+					/*int x = event.motion.x;
+					int y = event.motion.x;
+					std::cout << x << ' ' << y << std::endl;*/
+				}
+					//std::cout << "sss" << std::endl;
+					
+
+				break;
+
+
+			case(SDL_KEYDOWN):
+				switch (event.key.keysym.sym)
+				{
+				case(SDLK_ESCAPE) :
+					std::cout << "Quit ";
+					flag = 0;
+					break;
+				case(SDLK_i) :
+					std::cout << "The number of objects: " << objects.size() << std::endl;
+					break;
+				default:
+					break;
+				}
+				break;
 
 
 
-		//int elapsed = SDL_GetTicks();
-		//int green = (1 + sin(elapsed*0.001)) * 128;
-		//int red = (1 + sin(elapsed*0.002)) * 128;
-		//int blue = (1 + sin(elapsed*0.003)) * 128;
-
-		//
-
-		//const particle * const pParticle = swarmA.getParticles();
-		//for (int i = 0; i < Swarm::NPARTICLES; i++){
-		//	particle prtcl = pParticle[i];
-
-		//	int x = (prtcl.m_x + 1)* Screen::SCREEN_WIDTH/2;
-		//	int y = (prtcl.m_y + 1)* Screen::SCREEN_HEIGHT/2;
-
-		//	spaceScreen.setPixel(x, y, red, green, blue);
-		//	
-		//}
-		///*int elapsed =SDL_GetTicks();
-		//int green = (1+ sin(elapsed*0.001)) * 128;
-		//int red= (1 + sin(elapsed*0.002)) * 128;
-		//int blue = (1 + sin(elapsed*0.003)) * 128;
-
-		//std::cout << green << " ";
-		//for (int y = 0; y < screen.SCREEN_HEIGHT; y++){
-		//	for (int x = 0; x < screen.SCREEN_WIDTH; x++){
-		//		screen.setPixel(x, y, red, green, blue);
-		//		
-		//	}			
-		//}*/
-
-
-		//spaceScreen.update();
-
-		/*if (spaceScreen.processEvents() == 0){
-			break;
-		}*/
-		while (SDL_PollEvent(&event)){
-			if (event.type == SDL_MOUSEBUTTONDOWN ){
-				std::cout << "New Object" << std::endl;
-				int x = event.button.x;
-				int y = event.button.y;
-				createByButton(900, x, y, 0, 0, 0, 0);
-			}
-
-			if (event.type == SDL_QUIT){
+			case(SDL_QUIT) :
 				std::cout << "Quit ";
 				flag = 0;
 				break;
+			
+			default:
+				break;
 			}
+			
+			//if (event.type == SDL_MOUSEBUTTONDOWN ){
+			//	if (event.button.button == SDL_BUTTON_LEFT){
+			//		//std::cout << "New Object" << std::endl;
+			//		int x = event.button.x;
+			//		int y = event.button.y;
+			//		createByButton(900, x, y, 0, 0, 0, 0);
+			//	} 			
+			//	
+			//}
+			//if (event.type == SDL_MOUSEBUTTONUP){
+			//	if (event.button.clicks == 2){
+			//		std::cout << "sss" << std::endl;
+			//	}
+			//}
+
+			//if (event.type == SDL_QUIT){
+			//	std::cout << "Quit ";
+			//	flag = 0;
+			//	break;
+			//}
 		}
 		
 		
 	}
 }
-		
-
-
-	/*static int i = 0;
-	SDL_Event event;*/
-	//While(SDL_PollEvent(&event)){
-	//	/*if (event.type == SDL_){
-	//	return 2;
-	//	}*/
-
-	//	if (event.type == SDL_QUIT){
-	//		return 0;
-	//	}
-	//	/*	if (event.type == SDL_KEYDOWN){
-
-	//	std::cout << "KD ";
-	//	return 0;
-	//	}*/
-	//	//if (event.type == SDL_MOUSEMOTION){
-	//	//	std::cout << "KD ";
-	//	//	for (int j = 0; j < 100; j++, i++){
-	//	//		if (i<SCREEN_HEIGHT*SCREEN_WIDTH)
-	//	//			m_buffer[i] = 0xFF0000FF;
-	//	//	}
-	//	//	//std::cout << "KD ";
-
-	//	//}
-
-	//	update();
-	//}
