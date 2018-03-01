@@ -18,8 +18,6 @@ CelestialObject::CelestialObject(){
 	ax = 0;
 	ay = 0;
 
-	/*vx = 0;
-	vy = 0;*/
 	vx = 0;
 	vy = 0;
 

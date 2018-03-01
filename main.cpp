@@ -34,29 +34,12 @@ int main(int argc, char * argv[]){
 	/*space.add(10000, 1, 350, 100, 0, 0, 0, 0);
 	*/
 
-	const  int nparticles = 300;
+	const  int nparticles = 400;
 	space.add(nparticles);
 	//space.add(9000000, 1,Screen::SCREEN_WIDTH / 2, Screen::SCREEN_HEIGHT / 2,0,0,0,0 );
 
 
 
-
-	//		int x = (prtcl.m_x + 1)* Screen::SCREEN_WIDTH/2;
-	//		int y = (prtcl.m_y + 1)* Screen::SCREEN_HEIGHT/2;
-
-
-	//space.add(1000, 100, 200, 300, 0, 0, 2, 3);
-
-	/*space.add(14000, 1, 350, 370,  1,0, 0 ,0);
-	space.add(14000, 1, 350, 400, -1,0, 0, 0);
-
-
-	space.add(1400, 1, 300, 150,  0,0, 0 ,0);
-	space.add(1400, 1, 300, 450, 0, 0, 0, 0);
-
-	space.add(100, 1, 270, 300, 0, 0, 0, 0);*/
-	/*space.add(10000, 1, 270, 300, 0, 0, 0, 0); 
-	space.add(1400, 1, 300, 450, 0, 0, 0, 0);*/
 
 	space.loop();
 

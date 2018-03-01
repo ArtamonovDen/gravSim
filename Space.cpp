@@ -74,8 +74,8 @@ void Space::merge(CelestialObject*A, CelestialObject* B){
 	
 	//calculate the momentum
 	double M = (A->weight + B->weight);
-	double Vx = ((A->weight * A->vx) + (B->weight * B->vx)) / M;
-	double Vy = ((A->weight * A->vy) + (B->weight * B->vy)) / M;
+	double Vx = ((A->weight * A->vx) + (B->weight * B->vx)) /(100* M);
+	double Vy = ((A->weight * A->vy) + (B->weight * B->vy)) /(100* M);
 	M *= 0.6;
 
 	A->weight = M;
@@ -178,8 +178,10 @@ void Space::loop(){
 
 	int flag = 1;
 	int mouse_button_left = 0;//0-not clicked/ 1 - clicked
-
+	int x = 0, y = 0;
+	int _vx = 0, _vy = 0;
 	while (flag){
+		
 
 		somethingHappening();
 		spaceScreen.update();
@@ -194,28 +196,34 @@ void Space::loop(){
 			case (SDL_MOUSEBUTTONDOWN) :
 				if (event.button.button == SDL_BUTTON_LEFT){
 					//std::cout << "New Object" << std::endl;
-					int x = event.button.x;
-					int y = event.button.y;
-					createByButton(900, x, y, 0, 0, 0, 0);
+					x = event.button.x;
+					y = event.button.y;
+					//createByButton(900, x, y, 0, 0, 0, 0);
+					spaceScreen.setPixel(x, y, 255, 255, 255);
 					mouse_button_left = 1;
 				}
 				break;
 			
 			case(SDL_MOUSEBUTTONUP) :
-				mouse_button_left = 0;
+				mouse_button_left = 0; 
+				 std::cout << event.button.x << " " << event.button.y << std::endl;
+				 _vx = -0.1*(event.button.x - x);
+				  _vy = -0.1*(event.button.y - y);
+				 createByButton(900, x, y,0,0, _vx, _vy);
+				
 				break;
 
-			case(SDL_MOUSEMOTION) :
-				if (mouse_button_left == 1)
-				{
-					/*int x = event.motion.x;
-					int y = event.motion.x;
-					std::cout << x << ' ' << y << std::endl;*/
-				}
-					//std::cout << "sss" << std::endl;
-					
+			//case(SDL_MOUSEMOTION) :
+			//	if (mouse_button_left == 1)
+			//	{
+			//		/*int x = event.motion.x;
+			//		int y = event.motion.x;
+			//		std::cout << x << ' ' << y << std::endl;*/
+			//	}
+			//		//std::cout << "sss" << std::endl;
+			//		
 
-				break;
+			//	break;
 
 
 			case(SDL_KEYDOWN):
